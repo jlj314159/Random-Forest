@@ -29,11 +29,7 @@ from IPython.display import Image #to draw Decision Tree
 from sklearn import tree
 
 
-
-
-
 df = pd.read_csv('rftJulia.csv')
-
 
 
 X_train = pd.get_dummies(df[['a','b','c','d']])   #convert training data to dummy variables
@@ -90,7 +86,7 @@ y_pred = rfc.predict(X_test)
 
 
 # Create a dictionary of hyperparameters to search
-grid = {'n_estimators': [100,200,300], 'max_depth': [3,4,5,10], 'max_features': [2,3], 'random_state': [42]} #depth 4 gives 73% while depth 3 gives 87%
+grid = {'n_estimators': [3,10,15], 'max_depth': [3,4,5,10], 'max_features': [2,3], 'random_state': [42]} #depth 4 gives 73% while depth 3 gives 87%
 test_scores = []
 
 # Loop through the parameter grid, set the hyperparameters, and save the scores
@@ -107,7 +103,7 @@ best_idx = np.argmax(test_scores)
 print(test_scores[best_idx], ParameterGrid(grid)[best_idx])
 
 
-rfc = RandomForestClassifier(n_estimators=100, max_depth=3, max_features=2, random_state=42)
+rfc = RandomForestClassifier(n_estimators=3, max_depth=3, max_features=2, random_state=42)
 rfc = rfc.fit(X_train, y_train)
 y_pred = rfc.predict(X_test)
 
@@ -148,8 +144,8 @@ fig.savefig('rf_individualtree.png')
 # This may not the best way to view each estimator as it is small
 fn=list(X_train.columns.values)
 cn=['qualify','notqualify']
-fig, axes = plt.subplots(nrows = 1,ncols = 5,figsize = (10,2), dpi=800)
-for index in range(0, 5):
+fig, axes = plt.subplots(nrows = 1,ncols = 3,figsize = (10,3), dpi=800)
+for index in range(0, 3):
     tree.plot_tree(rfc.estimators_[index],
                    feature_names = fn, 
                    class_names=cn,
@@ -214,3 +210,5 @@ plt.savefig('feat_impt.png')
 # Rotate tick labels to vertical
 # plt.xticks(rotation=90)
 # plt.show()
+
+#testing what happens with a change
