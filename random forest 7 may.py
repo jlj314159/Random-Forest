@@ -27,6 +27,8 @@ from sklearn.tree import export_graphviz #to draw Decision Tree
 from sklearn.externals.six import StringIO #to draw Decision Tree
 from IPython.display import Image #to draw Decision Tree
 from sklearn import tree
+import pydotplus #to draw Decision Tree
+
 
 
 df = pd.read_csv('rftJulia.csv')
@@ -86,7 +88,7 @@ y_pred = rfc.predict(X_test)
 
 
 # Create a dictionary of hyperparameters to search
-grid = {'n_estimators': [3,10,15], 'max_depth': [3,4,5,10], 'max_features': [2,3], 'random_state': [42]} #depth 4 gives 73% while depth 3 gives 87%
+grid = {'n_estimators': [3,4], 'max_depth': [3,4,5,10], 'max_features': [2,3], 'random_state': [42]} #depth 4 gives 73% while depth 3 gives 87%
 test_scores = []
 
 # Loop through the parameter grid, set the hyperparameters, and save the scores
@@ -103,7 +105,7 @@ best_idx = np.argmax(test_scores)
 print(test_scores[best_idx], ParameterGrid(grid)[best_idx])
 
 
-rfc = RandomForestClassifier(n_estimators=3, max_depth=3, max_features=2, random_state=42)
+rfc = RandomForestClassifier(n_estimators=4, max_depth=3, max_features=3, random_state=42)
 rfc = rfc.fit(X_train, y_train)
 y_pred = rfc.predict(X_test)
 
@@ -117,16 +119,16 @@ _ = tree.plot_tree(rfc.estimators_[0], feature_names=X_train.columns, filled=Tru
 
 rfc.estimators_[0].tree_.max_depth
 
+tree = rfc.estimators_[1]
 
-
-# #draw out the Decision Tree
-# dot_data = StringIO()
-# export_graphviz(rfc, out_file=dot_data,  
-#                 filled=True, rounded=True,
-#                 special_characters=True,feature_names = list(X_train.columns.values),class_names=['qualify','notqualify'])
-# graph = pydotplus.graph_from_dot_data(dot_data.getvalue())  
-# graph.write_png('RF.png')
-# Image(graph.create_png())
+#draw out the Decision Tree
+dot_data = StringIO()
+export_graphviz(tree, out_file=dot_data,  
+                filled=True, rounded=True,
+                special_characters=True,feature_names = list(X_train.columns.values),class_names=['qualify','notqualify'])
+graph = pydotplus.graph_from_dot_data(dot_data.getvalue())  
+graph.write_png('RF.png')
+Image(graph.create_png())
 
 #plot one specific tree
 fn=list(X_train.columns.values)
@@ -144,14 +146,15 @@ fig.savefig('rf_individualtree.png')
 # This may not the best way to view each estimator as it is small
 fn=list(X_train.columns.values)
 cn=['qualify','notqualify']
-fig, axes = plt.subplots(nrows = 1,ncols = 3,figsize = (10,3), dpi=800)
-for index in range(0, 3):
+fig, axes = plt.subplots(nrows = 1,ncols = 4,figsize = (10,2), dpi=800)
+for index in range(0, 4):
     tree.plot_tree(rfc.estimators_[index],
                    feature_names = fn, 
                    class_names=cn,
                    filled = True,
                    ax = axes[index]);
 fig.savefig('rf_5trees.png')
+
 
 ##################################################################################################
 #ACCURACY#
