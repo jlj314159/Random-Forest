@@ -2,7 +2,7 @@
 """
 Created on Tue Oct 13 16:10:48 2020
 Hello Jenna
-@author: nickpaine, really?
+@author: Jenna and Julia
 """
 ##################################################################################################
 #PACKAGE AND DATA LOAD#
