@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Oct 13 16:10:48 2020
-
-@author: nickpaine
+Hello Jenna
+@author: nickpaine, really?
 """
 ##################################################################################################
 #PACKAGE AND DATA LOAD#
